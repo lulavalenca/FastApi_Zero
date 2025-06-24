@@ -1,0 +1,75 @@
+[project]
+name = "fastapi-zero"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "lulavalenca",email = "lulavalencafilho@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13,<4.0"
+dependencies = [
+    "fastapi[standard] (>=0.115.13,<0.116.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.12.0"
+pytest = "^8.4.1"
+pytest-cov = "^6.2.1"
+taskipy = "^1.14.1"
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ['migrations']
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+
+[tool.taskipy.tasks]
+# Comando para iniciar o servidor
+run = "fastapi dev fast_zero/app.py"
+
+# Comando para executar testes com cobertura
+test = "pytest -s -x --cov=fast_zero -vv"
+
+# Comando para gerar relatório de cobertura
+coverage = "coverage html"
+
+# Comando para verificação de código (linting)
+check = "ruff check ."
+
+# Comando para formatação automática
+format = "ruff format ."
+
+# Tarefa completa: formatar + verificar + testar
+all = "ruff format . && ruff check . && pytest --cov=fast_zero -vv"
+
+# Tarefa para preparar commit: formatação + verificação
+precommit = "ruff format . && ruff check ."
+
+# Tarefa adicional para linting
+lint = "ruff check ."
+
+# Novos comandos solicitados
+pre_format = "ruff check --fix ."  # Corrige problemas automaticamente
+pre_test = "task lint"             # Executa verificação antes dos testes
+post_test = "coverage html"        # Gera relatório após os testes
+
+# Fluxo completo de desenvolvimento
+dev_flow = "task pre_format && task pre_test && task test && task post_test"
+
+# Limpeza de artefatos
+clean = "del /q .coverage && rmdir /s /q htmlcov && rmdir /s /q .pytest_cache"
