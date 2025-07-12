@@ -40,7 +40,8 @@ addopts = '-p no:warnings'
 
 [tool.taskipy.tasks]
 # Comando para iniciar o servidor
-run = "fastapi dev fast_zero/app.py"
+run = "uvicorn fastapi_zero.app:app --reload"
+
 
 # Comando para executar testes com cobertura
 test = "pytest -s -x --cov=fast_zero -vv"
